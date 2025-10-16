@@ -27,7 +27,7 @@ function setup() {
   let colCount = 0;
   let rowCount = 0;
 
-  //Precalcolo min/max per le tre colonne
+  //Precalcolo min/max per le colonne
   //Recupera tutti i valori delle colonne del CSV e li converte in numeri.
   //Questo serve per mappare i valori in intervalli utilizzabili (dimensione, colore, rotazione)
   let allValues0 = table.getColumn("column0").map(Number);
