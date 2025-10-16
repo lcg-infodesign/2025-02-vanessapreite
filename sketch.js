@@ -21,7 +21,7 @@ function setup() {
   createCanvas(windowWidth, totalHeight);
   angleMode(DEGREES); //Le rotazioni saranno in gradi
   noStroke();
-  background('coral');
+  background('#8CB677');
 
   //Variabili per tenere traccia della posizione corrente nella griglia (colonna e riga)
   let colCount = 0;
@@ -51,12 +51,14 @@ function setup() {
     let rotationValue = map(Number(data["column2"]), min2, max2, 0, 360); //Rotazione iniziale del fiore in gradi
     let rotationSpeed = map(Number(data["column2"]), min2, max2, 0.5, 5); // Velocità rotazione
 
-    let flowerColor = lerpColor(color('#3366ff'), color('#ffcc00'), colorValue); //crea un gradiente basandosi su colorValue.
+    let flowerColor = lerpColor(color('#F88B8E'), color('#F4D808'), colorValue); //crea un gradiente basandosi su colorValue.
                                                                                 //Così i fiori cambiano colore in base ai dati.
 
-    let xPos = outerPadding + colCount * (itemSize + padding) + itemSize / 2;
-    let yPos = outerPadding + rowCount * (itemSize + padding) + itemSize / 2;
+    let xPos = outerPadding + colCount * (itemSize + padding) + itemSize / 2; //Calcola la posizione del fiore nella griglia.
+    let yPos = outerPadding + rowCount * (itemSize + padding) + itemSize / 2; // + itemSize / 2 serve per centrare il fiore.
 
+    //Aggiunge un oggetto al array flowers contenente tutte le informazioni
+    // necessarie per disegnare e animare il fiore.
     flowers.push({
       x: xPos,
       y: yPos,
@@ -67,7 +69,9 @@ function setup() {
       speed: rotationSpeed
     });
 
-    colCount++;
+    //Aggiorna la posizione nella griglia: passa alla colonna successiva.
+    //Se raggiunge la fine della riga, ricomincia da 0 e passa alla riga successiva.
+    colCount++; 
     if (colCount == cols) {
       colCount = 0;
       rowCount++;
@@ -75,25 +79,28 @@ function setup() {
   }
 }
 
+//Viene eseguito continuamente, permette di aggiornare la scena.
 function draw() {
-  background('coral');
+  background('#8CB677');
 
+  //Ciclo su tutti i fiori.
   for (let f of flowers) {
     // Controllo hover del mouse
-    if (dist(mouseX, mouseY, f.x, f.y) < f.size / 2) {
-      f.rotation = (f.rotation + f.speed) % 360; // Velocità dipende dal valore della colonna
-    } else {
-      f.rotation = f.baseRotation;
+    if (dist(mouseX, mouseY, f.x, f.y) < f.size / 2) { //calcola la distanza tra il mouse e il fiore.
+      f.rotation = (f.rotation + f.speed) % 360; // Se il mouse è sopra il fiore
+} else {                                         // aumenta la rotazione in base a f.speed.
+      f.rotation = f.baseRotation;               // altrimenti, il fiore mantiene la rotazione base.
     }
 
     push();
-    translate(f.x, f.y);
-    rotate(f.rotation);
-    drawFlower(f.size, f.color);
+    translate(f.x, f.y); //sposta il punto di origine al centro del fiore
+    rotate(f.rotation); //ruota il fiore secondo il valore calcolato
+    drawFlower(f.size, f.color); //disegna il fiore
     pop();
   }
 }
 
+//Disegno del fiore
 function drawFlower(size, col) {
   fill(col);
   let petals = 15;
@@ -102,6 +109,6 @@ function drawFlower(size, col) {
     ellipse(0, size / 4, petalLength / 2, size);
     rotate(360 / petals);
   }
-  fill(255, 200, 0);
+  fill('#FDE396');
   ellipse(0, 0, size / 2);
 }
